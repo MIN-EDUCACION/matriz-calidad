@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Matriz de Calidad</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    #modalExport {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    #modalExport .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+    }
+    #modalExport label {
+      margin-top: 10px;
+      display: block;
+    }
+    #modalExport .error {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="img/logo-emergia.png" alt="Logo Emergía" />
+    <img src="img/logo-mineducacion.png" alt="Logo Ministerio de Educación" />
+  </header>
+
+  <h1>Formulario de Evaluación de Calidad</h1>
+
+  <p><strong>Consecutivo actual: </strong><span id="consecutivo">MEN-001</span></p>
+
+  <form id="formulario">
+    <fieldset>
+      <label for="fecha-auditoria">Fecha de Auditoría:</label>
+      <input type="date" id="fecha-auditoria" required />
+
+      <label for="fecha-gestion">Fecha de Gestión:</label>
+      <input type="date" id="fecha-gestion" required />
+
+      <label for="proceso">Proceso:</label>
+      <select id="proceso" required>
+        <option value="">-- Selecciona --</option>
+        <option value="PQRSD">PQRSD</option>
+        <option value="NOTIFICACIONES - PQRSD">NOTIFICACIONES - PQRSD</option>
+        <option value="NOTIFICACIONES">NOTIFICACIONES</option>
+        <option value="LEGALIZACIONES">LEGALIZACIONES</option>
+        <option value="ANTENCION PRESENCIAL">ANTENCION PRESENCIAL</option>
+      </select>
+
+      <label for="asesor">Asesor:</label>
+      <select id="asesor" required>
+        <option value="">-- Selecciona --</option>
+      </select>
+
+      <label for="evaluador">Evaluador:</label>
+      <select id="evaluador" required>
+        <option value="">-- Selecciona --</option>
+      </select>
+
+      <label for="radicado">Radicado:</label>
+      <input type="text" id="radicado" class="radicado-input" required />
+    </fieldset>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Peso (%)</th>
+          <th>Tipo Error</th>
+          <th>Precisión</th>
+          <th>Dimensión</th>
+          <th>CUMPLIMIENTO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>50%</td><td>ENC</td><td>Usuario Final</td><td>Uso de plantillas</td><td><select id="c1" class="cumplimiento"><option>SI</option><option>NO</option><option>NA</option></select></td></tr>
+        <tr><td>30%</td><td>ENC</td><td>Usuario Final</td><td>Claridad del lenguaje</td><td><select id="c2" class="cumplimiento"><option>SI</option><option>NO</option><option>NA</option></select></td></tr>
+        <tr><td>20%</td><td>ENC</td><td>Usuario Final</td><td>Redacción – puntuación</td><td><select id="c3" class="cumplimiento"><option>SI</option><option>NO</option><option>NA</option></select></td></tr>
+        <tr><td>100%</td><td>EC</td><td>Usuario Final</td><td>Redacción – ortografía</td><td><select id="c4" class="cumplimiento"><option>SI</option><option>NO</option><option>NA</option></select></td></tr>
+        <tr><td>100%</td><td>EC</td><td>Usuario Final</td><td>Interpretación de la solicitud</td><td><select id="c5" class="cumplimiento"><option>SI</option><option>NO</option><option>NA</option></select></td></tr>
+        <tr><td>100%</td><td>EC</td><td>Negocio</td><td>Oportunidad en la respuesta</td><td><select id="c6" class="cumplimiento"><option>SI</option><option>NO</option><option>NA</option></select></td></tr>
+        <tr><td>100%</td><td>EC</td><td>Negocio</td><td>Pertinencia de la respuesta</td><td><select id="c7" class="cumplimiento"><option>SI</option><option>NO</option><option>NA</option></select></td></tr>
+        <tr><td>100%</td><td>EC</td><td>Negocio</td><td>Desempeño</td><td><select id="c8" class="cumplimiento"><option>SI</option><option>NO</option><option>NA</option></select></td></tr>
+      </tbody>
+    </table>
+
+    <label for="observaciones">Observaciones:</label>
+    <textarea id="observaciones"></textarea>
+
+    <label for="feedback">Retroalimentación:</label>
+    <textarea id="feedback"></textarea>
+
+    <div class="nota-container">
+      Nota: <span id="nota">100%</span>
+    </div>
+
+    <button type="submit">Guardar Evaluación</button>
+    <button type="button" id="btnExportarExcel">Exportar a Excel</button>
+    <button type="button" id="abrirModalExportarPdf">Exportar PDF de un monitoreo</button>
+  </form>
+
+  <!-- Modal -->
+  <div id="modalExport">
+    <div class="modal-content">
+      <h3>Seleccionar monitoreo para exportar</h3>
+      <label><input type="radio" name="exportOption" value="ultimo" checked /> Exportar último monitoreo</label>
+      <label><input type="radio" name="exportOption" value="consecutivo" /> Exportar por consecutivo:</label>
+      <input type="text" id="inputConsecutivo" placeholder="Ej: MEN-015" />
+      <div id="errorMensaje" class="error"></div>
+      <div style="margin-top: 15px;">
+        <button id="confirmarExportacion">Aceptar</button>
+        <button id="cancelarExportacion">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
