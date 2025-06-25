@@ -107,6 +107,29 @@ document.addEventListener('DOMContentLoaded', function () {
     registros.push(data);
     localStorage.setItem("monitoreos", JSON.stringify(registros));
 
+    fetch("https://script.google.com/macros/s/AKfycbyZOA79SxXMH-bn3bCLG0O0ndMXJrJEMA4cOeJZwJwgR02TRErbedNitSnGIANJirEe/exec", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        Consecutivo: data.Consecutivo,
+        Fecha_Auditoria: data["Fecha Auditoría"],
+        Fecha_Gestion: data["Fecha Gestión"],
+        Proceso: data.Proceso,
+        Asesor: data.Asesor,
+        Evaluador: data.Evaluador,
+        Radicado: data.Radicado,
+        Nota: data.Nota,
+        Semaforo: data["Semáforo"],
+        Observaciones: data.Observaciones,
+        Retroalimentacion: data["Retroalimentación"]
+      })
+    })
+    .then(res => res.text())
+    .then(msg => console.log("✅ Enviado a Google Sheets:", msg))
+    .catch(err => console.error("❌ Error al enviar a Sheets:", err));
+
     alert(`Auditoría guardada exitosamente.\nConsecutivo: ${consecutivo}\nNota: ${nota}%\n${semaforo}`);
     this.reset();
     notaSpan.textContent = '100%';
@@ -127,20 +150,17 @@ document.addEventListener('DOMContentLoaded', function () {
     XLSX.writeFile(wb, "monitoreos_calidad.xlsx");
   });
 
-  // Abrir modal
-  document.getElementById("abrirModalExportarPdf").addEventListener("click", function () {
-    document.getElementById("modalExport").style.display = "flex";
-    document.getElementById("inputConsecutivo").value = "";
-    document.getElementById("errorMensaje").textContent = "";
+  document.getElementById('abrirModalExportarPdf').addEventListener('click', function () {
+    document.getElementById('modalExport').style.display = 'flex';
+    document.getElementById('inputConsecutivo').value = '';
+    document.getElementById('errorMensaje').textContent = '';
   });
 
-  // Cancelar
-  document.getElementById("cancelarExportacion").addEventListener("click", function () {
-    document.getElementById("modalExport").style.display = "none";
+  document.getElementById('cancelarExportacion').addEventListener('click', function () {
+    document.getElementById('modalExport').style.display = 'none';
   });
 
-  // Confirmar exportación
-  document.getElementById("confirmarExportacion").addEventListener("click", function () {
+  document.getElementById('confirmarExportacion').addEventListener('click', function () {
     const registros = JSON.parse(localStorage.getItem("monitoreos")) || [];
     const opcion = document.querySelector("input[name='exportOption']:checked").value;
     let monitoreo = null;
