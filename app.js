@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
     localStorage.setItem("monitoreos", JSON.stringify(registros));
 
     // Enviar a Google Sheets
-    fetch("https://script.google.com/macros/s/AKfycbyZOA79SxXMH-bn3bCLG0O0ndMXJrJEMA4cOeJZwJwgR02TRErbedNitSnGIANJirEe/exec", {
+    fetch(https://script.google.com/macros/s/AKfycbyZOA79SxXMH-bn3bCLG0O0ndMXJrJEMA4cOeJZwJwgR02TRErbedNitSnGIANJirEe/exec, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
